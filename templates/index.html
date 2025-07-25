@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>كاشف الثغرات 911</title>
+</head>
+<body>
+    <h1>🔍 كاشف 911 - فحص الثغرات</h1>
+    <form method="post">
+        <input type="text" name="url" placeholder="ادخل رابط الموقع" required>
+        <button type="submit">بدء الفحص</button>
+    </form>
+
+    {% if results %}
+        <h2>🔐 النتائج:</h2>
+        <ul>
+            {% for item in results %}
+                <li>
+                    <strong>{{ item.vuln or "خطأ" }}:</strong> {{ item.url or item.error }} 
+                    (خطورة: {{ item.severity or "غير معروفة" }})
+                </li>
+            {% endfor %}
+        </ul>
+
+        <h2>🤖 تحليل بالذكاء الصناعي:</h2>
+        <p>{{ explanation }}</p>
+    {% endif %}
+</body>
+</html>
