@@ -1,15 +1,18 @@
 from flask import Flask, render_template, request
-from scanner.scan import run_scan  # تم تعديل الاستيراد
+from scanner.scan import run_all_scans
+from ai.analyzer import analyze_results
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='web/templates')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    results = None
+    scan_result = ''
+    ai_result = ''
     if request.method == 'POST':
-        url = request.form['url']
-        results = run_scan(url)  # تم تعديل اسم الدالة
-    return render_template('index.html', results=results)
+        target_url = request.form['url']
+        scan_result = run_all_scans(target_url)
+        ai_result = analyze_results(scan_result)
+    return render_template('index.html', result=scan_result, ai_result=ai_result)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
