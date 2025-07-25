@@ -1,9 +1,16 @@
 # ai/analyzer.py
 
 def analyze_results(vulnerabilities):
-    # تحليل بسيط باستخدام الذكاء الصناعي (نسخة أولية)
-    summary = "🤖 تحليل النتائج:\n"
+    analysis = []
     for vuln in vulnerabilities:
-        severity = vuln.get("severity", "غير محدد")
-        summary += f"- النوع: {vuln.get('type', 'غير معروف')} | الخطورة: {severity}\n"
-    return summary
+        severity = "🔴 عالية" if "SQL" in vuln["type"] or "XSS" in vuln["type"] else "🟡 متوسطة"
+        suggestion = "استخدم فلترة المدخلات." if "XSS" in vuln["type"] else "استخدم استعلامات معدّة مسبقًا."
+        analysis.append({
+            "type": vuln["type"],
+            "url": vuln["url"],
+            "severity": severity,
+            "description": vuln.get("description", "لم يتم تقديم وصف."),
+            "suggestion": suggestion,
+            "poc": vuln.get("poc", "غير متوفّر.")
+        })
+    return analysis
