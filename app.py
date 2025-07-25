@@ -1,18 +1,25 @@
 from flask import Flask, render_template, request
-from scanner.scan import run_all_scans
+from scan import run_scan
 from ai.analyzer import analyze_results
+import os
 
-app = Flask(__name__, template_folder='web/templates')
+app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    scan_result = ''
-    ai_result = ''
-    if request.method == 'POST':
-        target_url = request.form['url']
-        scan_result = run_all_scans(target_url)
-        ai_result = analyze_results(scan_result)
-    return render_template('index.html', result=scan_result, ai_result=ai_result)
+    return render_template('index.html')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/scan', methods=['POST'])
+def scan_target():
+    url = request.form.get('url')
+    if not url:
+        return render_template("index.html", error="❌ يرجى إدخال رابط.")
+    
+    raw_results = run_scan(url)
+    analyzed = analyze_results(raw_results)
+    
+    return render_template("index.html", results=analyzed, target=url)
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # يستخدم البورت الصحيح لـ Render
+    app.run(host="0.0.0.0", port=port)  # ربط التطبيق على 0.0.0.0 لتجنب مشكلة Render
