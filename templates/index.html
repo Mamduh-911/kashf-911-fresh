@@ -1,15 +1,49 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>كاشف الثغرات 911</title>
+    <title>🇸🇦 كاشف الثغرات 911</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: "Tajawal", sans-serif;
+            direction: rtl;
+            text-align: right;
+            padding: 30px;
+            color: #1a1a1a;
+        }
+        h1 {
+            color: #006c3e;
+            font-size: 2.5em;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 1.1em;
+        }
+        button {
+            background-color: #006c3e;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            background: white;
+            border-right: 4px solid #006c3e;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        .emoji {
+            font-size: 1.3em;
+        }
+    </style>
 </head>
 <body>
-    <h1>🛡️ كاشف الثغرات 911</h1>
-    <form method="post" action="/scan">
-        <input type="text" name="url" placeholder="أدخل رابط الفحص" required>
-        <button type="submit">🔍 فحص</button>
+    <h1>🛡️ كاشف الثغرات 911 - نسخة سعودية</h1>
+
+    <form method="POST" action="/scan">
+        <input type="text" name="url" placeholder="ضع الرابط هنا لفحصه" required style="width: 60%;">
+        <button type="submit">🔍 افحص الآن</button>
     </form>
 
     {% if error %}
@@ -18,18 +52,14 @@
 
     {% if results %}
         <h2>🔎 نتائج الفحص لـ {{ target }}</h2>
-        <ul>
-            {% for r in results %}
-                <li>
-                    <strong>النوع:</strong> {{ r.type }} <br>
-                    <strong>الخطورة:</strong> {{ r.severity }} <br>
-                    <strong>الوصف:</strong> {{ r.description }} <br>
-                    <strong>التوصية:</strong> {{ r.suggestion }} <br>
-                    <strong>PoC:</strong> <code>{{ r.poc }}</code>
-                </li>
-                <hr>
-            {% endfor %}
-        </ul>
+        {% for r in results %}
+            <div class="result">
+                <p><span class="emoji">🧷</span> <strong>النوع:</strong> {{ r.type }}</p>
+                <p><span class="emoji">📍</span> <strong>الرابط:</strong> {{ r.url }}</p>
+                <p><span class="emoji">⚠️</span> <strong>الوصف:</strong> {{ r.description }}</p>
+                <p><span class="emoji">💡</span> <strong>PoC:</strong> <code>{{ r.poc }}</code></p>
+            </div>
+        {% endfor %}
     {% endif %}
 </body>
 </html>
