@@ -1,18 +1,15 @@
-from flask import Flask, request, render_template
-from scanner.scan import run_all_scans
-from ai_analysis.analyze import explain_vulns
+from flask import Flask, render_template, request
+from scanner.scan import run_scan  # تم تعديل الاستيراد
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    results = []
-    explanation = ""
+    results = None
     if request.method == 'POST':
         url = request.form['url']
-        results = run_all_scans(url)
-        explanation = explain_vulns(results)
-    return render_template('index.html', results=results, explanation=explanation)
+        results = run_scan(url)  # تم تعديل اسم الدالة
+    return render_template('index.html', results=results)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0')
