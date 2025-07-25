@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>كاشف الثغرات 911</title>
+    <title>كاشف 911 - فحص الثغرات</title>
 </head>
-<body>
-    <h1>🔍 كاشف 911 - فحص الثغرات</h1>
+<body style="text-align:center; font-family:Tahoma;">
+    <h2>🔍 كاشف 911 - فحص الثغرات</h2>
     <form method="post">
-        <input type="text" name="url" placeholder="ادخل رابط الموقع" required>
-        <button type="submit">بدء الفحص</button>
+        <input type="text" name="url" placeholder="ادخل رابط الموقع" style="width:60%;">
+        <button type="submit">🔵 بدء الفحص</button>
     </form>
 
-    {% if results %}
-        <h2>🔐 النتائج:</h2>
-        <ul>
-            {% for item in results %}
-                <li>
-                    <strong>{{ item.vuln or "خطأ" }}:</strong> {{ item.url or item.error }} 
-                    (خطورة: {{ item.severity or "غير معروفة" }})
-                </li>
-            {% endfor %}
-        </ul>
+    {% if result %}
+    <h3>🔐 النتائج:</h3>
+    {% for r in result %}
+        <p>⚠️ <strong>{{ r.vuln }}</strong> (الخطورة: {{ r.severity }})<br>
+        📝 {{ r.description }}<br>
+        🧪 PoC: {{ r.poc }}<br>
+        🛠️ الحل: {{ r.fix }}</p>
+        <hr>
+    {% endfor %}
+    {% endif %}
 
-        <h2>🤖 تحليل بالذكاء الصناعي:</h2>
-        <p>{{ explanation }}</p>
+    {% if ai_result %}
+    <h3>🤖 تحليل بالذكاء الصناعي:</h3>
+    <pre>{{ ai_result }}</pre>
     {% endif %}
 </body>
 </html>
